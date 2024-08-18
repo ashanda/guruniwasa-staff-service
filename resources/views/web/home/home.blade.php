@@ -1,11 +1,19 @@
 @extends('web.layouts.app')
 @section('content')
+@if(session()->has('staff_data'))
+    @php
+        $staffData = session('staff_data');
+        
+    @endphp
+@else
+     <script>window.location = "{{ route('web.logout') }}";</script>
+@endif
 <div class="container-fluid">
    <div class="row align-items-center pt-2">
       <div class="col-lg-3 col-sm-2">
       </div>
       <div class="col-lg-6 col-sm-6 text-center pt-lg-0 pt-3">
-         <p class="font-17 fw-bolder text-purple">Hello, <span class="fst-italic">< Nadishan Chathuranga ></span>
+         <p class="font-17 fw-bolder text-purple">Hello, <span class="fst-italic">< {{ $staffData['name'] }} ></span>
          </p>
          <h1 class="font-36 fw-bold text-uppercase text-purple pt-lg-0 pt-1">WELCOME TO GURU NIWASA LMS
          </h1>

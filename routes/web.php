@@ -39,11 +39,14 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('/', [HomeController::class, 'index'])->name('web.main');
-
+Route::get('/', [AuthController::class, 'loginView'])->name('web.index');
+Route::get('/login', [AuthController::class, 'loginView'])->name('web.login');
+Route::post('/login', [AuthController::class, 'login'])->name('api.staffs.login');
 // profile
-
+Route::middleware(['check.authorization'])->group(function () {
+Route::get('/home', [HomeController::class, 'index'])->name('web.home');
 Route::get('/my-profile', [ProfileController::class, 'myProfile'])->name('web.profile');
+Route::post('/logout', [AuthController::class, 'logout'])->name('web.logout');
 
 
 
@@ -93,8 +96,8 @@ Route::get('/birthday-list', [NoticeBoardController::class, 'birthdayList'])->na
 
 
 // AuthController
-Route::get('/home', [AuthController::class, 'homeView'])->name('web.home');
-Route::get('/login', [AuthController::class, 'loginView'])->name('web.login');
+
+
 Route::get('/forgot_password', [AuthController::class, 'forgotPassword'])->name('web.forgot_password');
 
 
@@ -207,3 +210,4 @@ Route::get('/schedule-class-view', [TeacherController::class, 'scheduleClassView
 
 Route::get('/add-grade', [TeacherController::class, 'addGrade'])->name('web.teachers.add_grade');
 Route::get('/add-subject', [TeacherController::class, 'addSubject'])->name('web.teachers.add_subject');
+});
