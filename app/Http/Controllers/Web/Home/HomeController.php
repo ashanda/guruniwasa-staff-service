@@ -11,7 +11,7 @@ class HomeController extends Controller
     {
         try{
 
-            return view('web.home.home');
+             return view('web.home.home');
 
         }catch(\Exception $exception){
 
