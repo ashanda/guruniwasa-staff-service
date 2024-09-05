@@ -52,7 +52,7 @@
          <div class="border-new pt-3 pb-5 px-3 rounded-35 bg-white text-center">
             <p
                class="font-24 border-2 text-uppercase fw-bold text-purple py-3 rounded-35  border border-primary text-center bg-light-blue">
-               ADMIN
+               Staff
             </p>
             <div class="row justify-content-center pt-4">
                <div class="col-lg-10 text-white ">
@@ -68,7 +68,7 @@
          <div class="border-new pt-3 pb-5 px-3 rounded-35 bg-white text-center">
             <p
                class="font-24 border-2 text-uppercase fw-bold text-purple py-3 rounded-35  border border-primary text-center bg-light-blue">
-               SUPER ADMIN
+               ADMIN
             </p>
             <div class="row justify-content-center pt-4">
                <div class="col-lg-10 text-white ">

@@ -57,9 +57,14 @@ Route::get('/fees/class-fees', [FeesController::class, 'classFees'])->name('web.
 
 Route::get('/fees/cash', [FeesController::class, 'classFeesCash'])->name('web.fees.class_fess_cash');
 Route::get('/fees/pos', [FeesController::class, 'classFeesPos'])->name('web.fees.class_fess_Pos');
+
+Route::get('/fees/monthly-card-payment', [FeesController::class, 'classFeesMonthlyCardPayment'])->name('web.fees.class_fees_monthly_card_payment');
 Route::get('/fees/card-payment', [FeesController::class, 'classFeesCardPayment'])->name('web.fees.class_fess_card_payment');
 Route::get('/fees/error-payment', [FeesController::class, 'classFeesErrorPayment'])->name('web.fees.class_fess_error_payment');
+
+Route::get('/fees/monthly-bank-payment', [FeesController::class, 'classFeesMonthlyBankPayment'])->name('web.fees.class_fees_monthly_bank_payment');
 Route::get('/fees/bank-payment', [FeesController::class, 'classFeesBankPayment'])->name('web.fees.class_fess_bank_payment');
+
 Route::get('/fees/payment-history', [FeesController::class, 'paymentHistory'])->name('web.fees.payment_history');
 
 
@@ -210,4 +215,10 @@ Route::get('/schedule-class-view', [TeacherController::class, 'scheduleClassView
 
 Route::get('/add-grade', [TeacherController::class, 'addGrade'])->name('web.teachers.add_grade');
 Route::get('/add-subject', [TeacherController::class, 'addSubject'])->name('web.teachers.add_subject');
+
+Route::post('/payment-approve', [FeesController::class, 'approve'])->name('approve');
+Route::post('/payment-reject', [FeesController::class, 'reject'])->name('reject');
+Route::post('/payment-add-remark', [FeesController::class, 'addRemark'])->name('addRemark');
+Route::get('/payment-history', [FeesController::class, 'paymentHistory'])->name('paymentHistory');
+
 });
