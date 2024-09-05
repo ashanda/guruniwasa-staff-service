@@ -20,7 +20,9 @@
    </head>
    <body>
       @include('web.layouts.headers.header')
+      @include('sweetalert::alert')
       @yield('content')
+      
       @include('web.layouts.footers.footer')
       @yield('scripts')
 
