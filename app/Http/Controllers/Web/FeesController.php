@@ -395,5 +395,42 @@ class FeesController extends Controller
 
         
     }
+
+
+    public function paymentHistorysearch(Request $request){
+        
+        $client = new Client();
+        
+        $url = env('API_GETWAY_URL') . '/api/v1/payment-history-search';
+        $accessToken = $request->cookie('access_token');
+        try {
+            $response = $client->post($url, [
+                'headers' => [ 
+                     'Authorization' => 'Bearer ' . $accessToken,
+                ],
+                'json' => [
+                    'month' => $request->month,
+                    'payment_method' => $request->payment_method
+                ]
+            ]);
+           
+            if ($response->getStatusCode() == 200) {
+                $body = json_decode($response->getBody(), true);
+                if (isset($body['status']) && $body['status'] === 200) {
+                    // Store token in a secure cookie
+                    
+                    $payments = $body['data']; // Extracting grades data from response
+                    
+                    
+                    return view('web.fees.payment_history', ['payments' => $payments]);
+                } else {
+                    return back()->with('error', $body['message']);
+                }
+            }
+       } catch (\Exception $e) {
+            
+           return back()->with('error', $e);
+        }
+    }
     
 }
