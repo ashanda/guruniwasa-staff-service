@@ -1,5 +1,6 @@
 @extends('web.layouts.app')
 @section('content')
+
 <div class="container-fluid">
    <div class="row align-items-center pt-2">
       <div class="col-lg-3 col-sm-3">
@@ -9,9 +10,14 @@
          </a>
       </div>
       <div class="col-lg-6 col-sm-6 text-center">
-         <h1 class="font-36 fw-bold text-uppercase text-purple">CLASS FEES - CARD PAYMENTS
+         <h1 class="font-36 fw-bold text-uppercase text-purple">CLASS FEES - BANK PAYMENTS
          </h1>
-         <p class="font-20 fw-500 text-purple">JANUARY - 2024
+         @php
+           $monthNumber = request('month');
+           $monthName = date('F', mktime(0, 0, 0, $monthNumber));
+           $currentYear = date('Y');
+         @endphp
+         <p class="font-20 fw-500 text-purple text-uppercase">{{ $monthName }} - {{ $currentYear }}
          </p>
       </div>
       <div class="col-lg-3 col-sm-3 pt-lg-0 pt-3">
@@ -22,78 +28,113 @@
 <div class="container-fluid py-lg-5 py-3 px-lg-5 ">
    <div class="row middle-hight">
       <div class="col-12">
-         <div class="row justify-content-end">
-            <div class="col-lg-3 col-sm-5 col-8 text-end pb-lg-0 pb-2">
-               <i class="fa-solid fa-file-excel fs-2 text-success mb-2 hvr-grow"></i>
-               <span class=" text-uppercase font-13 fw-bold text-dark"> Download excel</span>
-            </div>
-         </div>
+          
          <div class="table-responsive  ">
-            <table id="feesCardPaymentTable" class="table table-striped table-hover table-bordered">
+            <table id="feesCashTable" class="table table-striped table-hover table-bordered">
                <thead class="text-white gradient-background text-uppercase fw-light font-14">
                   <th>DATE</th>
-                  <th>TIME</th>
-                  <th>CARD
-                    TYPE</th>
-                  <th>STUDENT NAME</th>
-                  <th>ID</th>
+                  <th>Month</th>
+                  <th>Subject</th>
+                  <th>Teacher</th>
                   <th>STUDENT
-                    DETAILS</th>
-                  <th>GRADE</th>
-                  <th>PAYMENT DETAILS</th>
-                  <th>DATA
-                    ENTERED BY</th>
-                  <th>DELETE (NEED
-                    APPROVAL)</th>
+                    DETAILS</th> 
+                  <th>PAYMENT Type</th>
+                  <th>PAY AMOUNT</th>
+                  <th>DISCOUNT</th>
+                  <th>Approved By</th>
                   </tr>
                </thead>
-               <tbody class="font-13 fw-500 align-items-center">
-                  <tr>
-                      <td>01.01.2023</td>
-                      <td>2.54
-                        pm</td>
-                        <td> </td>
-                        <td>Ashen Silva </td>
-                        <td>GNI 0001</td>
-                        <td><a href=" " class=" w-100 text-uppercase font-12
-                             text-white rounded-pill py-2 px-3 bg-primary fw-500 text-center   hvr-shrink">VIEW DETAILS </a></td>
-                 
-                             <td>Grade 6</td> 
-                             <td>5600.00<br>
-                                <a href=" " class=" w-100 text-uppercase font-12
-                                text-white rounded-pill py-2 px-3 bg-primary fw-500 text-center  hvr-shrink">VIEW DETAILS </a> 
-                            </td> 
+               
+              <tbody class="font-13 fw-500 align-items-center">
+               
+    @foreach ($payments as $paymentGroup)
+               @php
+                    // Initialize variables for summing up the total fees, original subject fees, and discount
+                    $totalFees = 0; // What has been paid
+                    $originalSubjectFees = 0; // The original subject fees before discount
 
-                            <td>PRAMOD THILINA</td>
-                            <td>
-                                <button class="btn btn-danger fw-500 font-11 px-2 w-100 rounded-pill text-white"
-                                data-bs-toggle="modal" data-bs-target="#cardPaymentDelete">DELETE</button>
-                             <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="cardPaymentDelete"
-                                tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-                                <div class="modal-dialog modal-dialog-centered ">
-                                   <div class="modal-content">
-                                      <div class="modal-header">
-                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                      </div>
-                                      <div class="modal-body ">
-                                         <div class="row">
-                                           <div class="col-12">
-                                             <p class=" fw-500 font-14 rounded-3 text-dark pb-3">
-                                                 Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                                                  Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                                             </p>
-                                             <button type="button" class="btn  font-14 text-white gradient-background-1 py-2 px-5  ">
-                                                 Submit</button>
-                                           </div>
-                                         </div>
-                                      </div>
-                                   </div>
-                                </div>
-                             </div>
-                            </td>
+                    // Calculate the total fees and original subject fees
+                    foreach ($paymentGroup as $payment) {
+                        $totalFees += $payment['fee'] ?? 0; // Total paid fees
 
-                            </tr>
-               </tbody>
+                        // Summing up the original subject fees (before any discount)
+                        $originalSubjectFees += $payment['subject']['data']['fee'] ?? 0;
+                    }
+
+                    // Calculate the discount based on the difference between original and total fees paid
+                    $totalDiscount = $originalSubjectFees - $totalFees;
+
+                    // If total discount is negative, set it to 0
+                    $totalDiscount = max(0, $totalDiscount);
+
+                    // Calculate the final payable amount (fees already paid)
+                    $finalPayableAmount = $totalFees;
+                @endphp
+        <tr>
+            <!-- Date Column -->
+            <td>{{ $paymentGroup[0]['dateTime'] ?? 'N/A' }}</td>
+            
+            <!-- Month Column -->
+            <td>
+                <span class="py-2 px-4 bg-success text-white font-13 text-center rounded-pill">
+                    {{ \Carbon\Carbon::parse($paymentGroup[0]['pay_month'])->format('F') ?? 'N/A' }}
+                </span>
+            </td>
+
+            <!-- View Slip Column -->
+            <td>
+               <ul>
+               @foreach ($paymentGroup as $payment)
+               <li>{{ $payment['subject']['data']['sname'] ?? 'N/A' }}</li>
+               @endforeach
+               </ul>
+            </td>
+
+            <!-- Student Details Button -->
+            <td>
+               <ul>
+               @foreach ($paymentGroup as $payment)
+               <li>{{ $payment['teacher']['data']['name'] ?? 'N/A' }}</li>
+               @endforeach
+               </ul>
+            </td>
+
+ 
+            <td>
+               <ul>  
+                  <li>Student Name : {{ $paymentGroup[0]['student']['data']['full_name'] }}</li>
+                  <li>Student ID: {{ $paymentGroup[0]['student']['data']['student_code'] }}</li>
+                  <li>Contact Num : {{ '0'.$paymentGroup[0]['student']['data']['username'] }}</li>
+               </ul>
+            
+            </td>
+            <td>
+               {{ $paymentGroup[0]['payment_type'] ?? 'N/A' }}
+            </td>
+            <td>
+               {{ number_format($finalPayableAmount, 2) }}
+            </td>
+            <td>
+               {{ number_format($totalDiscount, 2) }}
+            </td>
+            <td>
+               {{ $paymentGroup[0]['approved_by'] ?? 'N/A' }} - {{ $paymentGroup[0]['approved_at'] ?? 'N/A' }} <br>
+               @if($paymentGroup[0]['status'] == "Approved")
+               <span class="text-success">{{ $paymentGroup[0]['status'] ?? 'N/A' }}</span>
+               @else
+               <span class="text-danger">{{ $paymentGroup[0]['status'] ?? 'N/A' }}</span>
+               @endif
+               
+            </td>
+            <!-- Actions Dropdown -->
+            
+        </tr>
+    @endforeach
+</tbody>
+
+
+
+
             </table>
          </div>
       </div>
