@@ -35,7 +35,7 @@ use Carbon\Carbon;
                   <h5 class=" font-24 fw-bold text-start pb-3   text-purple pt-lg-0 pt-1">
                      CLASS FEE HISTORY
                   </h5>
-                  <form action="{{ route('web.fees.class_fess') }}" method="POST">
+                  <form action="{{ route('web.fees.history_fees') }}" method="POST">
                      @csrf
                      <div class="row">
                         <!-- Payment Month Selection -->

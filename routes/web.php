@@ -221,4 +221,7 @@ Route::post('/payment-reject', [FeesController::class, 'reject'])->name('reject'
 Route::post('/payment-add-remark', [FeesController::class, 'addRemark'])->name('addRemark');
 Route::get('/payment-history', [FeesController::class, 'paymentHistory'])->name('paymentHistory');
 
+
+Route::post('/payment-history-search', [FeesController::class, 'paymentHistorysearch'])->name('web.fees.history_fees');
+
 });
