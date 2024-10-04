@@ -32,6 +32,22 @@ use Carbon\Carbon;
                 <i class="fa-solid fa-tag fs-1 text-purple  "></i>
                <p
                   class="font-20 text-uppercase fw-bold text-purple py-3 rounded-35  ">
+                  ITEMS  Categories</p>
+               <div class="row justify-content-center ">
+                  <div class="col-lg-10 text-white ">
+                     <a href="{{ route('web.item-categories') }}" class=" w-100 text-uppercase font-14
+                      text-white rounded-pill py-2 px-3 bg-primary fw-500 align-items-center   hvr-shrink">See More</a>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+      <div class="row middle-hight justify-content-center">
+         <div  class="col-lg-3 col-sm-4 mb-3 align-items-center">
+            <div class="border-new pt-3 pb-4 px-3 mx-lg-0 mx-sm-0 mx-3  rounded-35 bg-white text-center">
+                <i class="fa-solid fa-tag fs-1 text-purple  "></i>
+               <p
+                  class="font-20 text-uppercase fw-bold text-purple py-3 rounded-35  ">
                   ADD ITEMS  </p>
                <div class="row justify-content-center ">
                   <div class="col-lg-10 text-white ">
