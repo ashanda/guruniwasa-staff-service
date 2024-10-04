@@ -1,6 +1,6 @@
 @extends('web.layouts.app')
 @section('content')
-{{-- {{ dd($student) }} --}}
+{{-- {{ dd($students) }} --}}
 
 <div class="container-fluid">
    <div class="row align-items-center pt-2">
@@ -57,6 +57,7 @@
                   </tr>
                </thead>
                <tbody class="font-14 align-items-center fw-500">
+                  @foreach ($students as $student)
                   <tr>
 
                     <td>{{ \Carbon\Carbon::parse($student['created_at'])->toDateString() }}</td>
@@ -181,6 +182,7 @@
                         </div>
                      </td>
                   </tr>
+                  @endforeach
                </tbody>
             </table>
          </div>

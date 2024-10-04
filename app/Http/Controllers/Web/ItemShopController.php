@@ -3,12 +3,165 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ItemShopController extends Controller
 {
 
+    
+    public function itemCategories(Request $request)
+    {
+         $client = new Client();
+        
+        $url = env('API_GETWAY_URL') . '/api/v1/item-categories-index';
+        $accessToken = $request->cookie('access_token');
+        try {
+            $response = $client->get($url, [
+                'headers' => [ 
+                     'Authorization' => 'Bearer ' . $accessToken,
+                ],
+                
+                
+            ]);
+          
+                if ($response->getStatusCode() == 200) {
+                $body = json_decode($response->getBody(), true);
+                
+                if (isset($body['status']) && $body['status'] === 200) {
 
+                    $data = $body['data'];
+                    // Return the student data as JSON for AJAX
+                    return view('web.item-shop.item_categories',compact('data'));
+                } else {
+                    Alert::error($body['message']);
+                    return redirect()->back();
+                }
+            }
+         } catch (\Exception $e) {
+            
+          return back()->with('error', $e);
+        }
+    }
+
+
+
+    public function itemCategoriesStore( Request $request )
+    {
+        $client = new Client();
+        
+        $url = env('API_GETWAY_URL') . '/api/v1/item-categories-store';
+        $accessToken = $request->cookie('access_token');
+        try {
+            $response = $client->post($url, [
+                'headers' => [ 
+                     'Authorization' => 'Bearer ' . $accessToken,
+                ],
+                'json' => [
+                    'category_name' => $request->category_name,
+                ],
+                
+            ]);
+          
+                if ($response->getStatusCode() == 200) {
+                $body = json_decode($response->getBody(), true);
+                
+                if (isset($body['status']) && $body['status'] === 200) {
+
+                    
+                    // Return the student data as JSON for AJAX
+                    Alert::success($body['message']);
+                    return redirect()->back();
+                } else {
+                    Alert::error($body['message']);
+                    return redirect()->back();
+                }
+            }
+         } catch (\Exception $e) {
+            
+          return back()->with('error', $e);
+        }
+    }
+
+    public function itemCategoriesUpdate( Request $request )
+    {
+        $client = new Client();
+        
+        $url = env('API_GETWAY_URL') . '/api/v1/item-categories-update';
+        $accessToken = $request->cookie('access_token');
+        try {
+            $response = $client->post($url, [
+                'headers' => [ 
+                     'Authorization' => 'Bearer ' . $accessToken,
+                ],
+                'json' => [
+                    'category_id' => $request->category_id,
+                    'category_name' => $request->category_name,
+                ],
+                
+            ]);
+          
+                if ($response->getStatusCode() == 200) {
+                $body = json_decode($response->getBody(), true);
+                
+                if (isset($body['status']) && $body['status'] === 200) {
+
+                    
+                    // Return the student data as JSON for AJAX
+                    Alert::success($body['message']);
+                    return redirect()->back();
+                } else {
+                    Alert::error($body['message']);
+                    return redirect()->back();
+                }
+            }
+         } catch (\Exception $e) {
+            
+          return back()->with('error', $e);
+        }
+    }
+
+    public function itemCategoriesDelete( Request $request )
+    {
+        $client = new Client();
+        
+        $url = env('API_GETWAY_URL') . '/api/v1/item-categories-delete';
+        $accessToken = $request->cookie('access_token');
+        try {
+            $response = $client->post($url, [
+                'headers' => [ 
+                     'Authorization' => 'Bearer ' . $accessToken,
+                ],
+                'json' => [
+                    'category_id' => $request->category_id,
+                    
+                ],
+                
+            ]);
+          
+                if ($response->getStatusCode() == 200) {
+                $body = json_decode($response->getBody(), true);
+                
+                if (isset($body['status']) && $body['status'] === 200) {
+
+                    
+                    // Return the student data as JSON for AJAX
+                    Alert::success($body['message']);
+                    return redirect()->back();
+                } else {
+                    Alert::error($body['message']);
+                    return redirect()->back();
+                }
+            }
+         } catch (\Exception $e) {
+            
+          return back()->with('error', $e);
+        }
+    }
+
+    
+    
     public function itemShopView()
     {
         try{
@@ -166,16 +319,71 @@ class ItemShopController extends Controller
         }
     }
 
-    public function addItems()
+    public function addItems(Request $request)
     {
-        try{
+        $client = new Client();
+        
+        $url = env('API_GETWAY_URL') . '/api/v1/item-categories-index';
+        $accessToken = $request->cookie('access_token');
+        try {
+            $response = $client->get($url, [
+                'headers' => [ 
+                     'Authorization' => 'Bearer ' . $accessToken,
+                ],
+  
+            ]);
+          
+                if ($response->getStatusCode() == 200) {
+                $body = json_decode($response->getBody(), true);
+                
+                if (isset($body['status']) && $body['status'] === 200) {
+                    $staff = $this->staffget($accessToken);
+                    $allIteams = $this->alliteams($accessToken);
+                    
+                    $data = $body['data'];
 
-            return view('web.item-shop.add_item');
-
-        }catch(\Exception $exception){
-
-            return;
+                    // Return the student data as JSON for AJAX
+                    return view('web.item-shop.add_item',compact('data','staff','allIteams'));
+                } else {
+                    Alert::error($body['message']);
+                    return redirect()->back();
+                }
+            }
+         } catch (\Exception $e) {
+            
+          return back()->with('error', $e);
         }
+
+    }
+
+    private function alliteams( $accessToken){
+        
+        $client = new Client(); 
+        $url = env('API_GETWAY_URL') . '/api/v1/item-index';
+        $response = $client->get($url, [
+                'headers' => [ 
+                     'Authorization' => 'Bearer ' . $accessToken,
+                ],
+  
+            ]);
+
+       
+        return json_decode((string) $response->getBody(), true);
+    }
+
+    private function staffget( $accessToken){
+        
+        $client = new Client(); 
+        $url = env('API_GETWAY_URL') . '/api/v1/all-staff';
+        $response = $client->get($url, [
+                'headers' => [ 
+                     'Authorization' => 'Bearer ' . $accessToken,
+                ],
+  
+            ]);
+
+       
+        return json_decode((string) $response->getBody(), true);
     }
 
 
@@ -219,7 +427,45 @@ class ItemShopController extends Controller
     }
 
 
+    public function addShopItems(Request $request){
+        
+        $client = new Client();
+        
+        $url = env('API_GETWAY_URL') . '/api/v1/item_store';
+        $accessToken = $request->cookie('access_token');
+        try {
+            $response = $client->post($url, [
+                'headers' => [ 
+                     'Authorization' => 'Bearer ' . $accessToken,
+                ],
+                'json' => $request->all(),
+  
+             ]);
+          
+                if ($response->getStatusCode() == 200) {
+                $body = json_decode($response->getBody(), true);
+                
+                if (isset($body['status']) && $body['status'] === 200) {
+                    
+                    Alert::success($body['message']);
+                    return redirect()->back();
+                } else {
+                    
+                    Alert::error($body['message']);
+                    return redirect()->back();
+                }
+            }
+         } catch (\Exception $e) {
+            
+          return back()->with('error', $e);
+        }
 
+        
+    }
+
+
+
+    
 
 
 

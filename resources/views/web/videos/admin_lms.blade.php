@@ -1,5 +1,6 @@
 @extends('web.layouts.app')
 @section('content')
+
 <div class="container-fluid">
    <div class="row align-items-center pt-2">
       <div class="col-lg-3 col-sm-3">
@@ -21,65 +22,29 @@
             <table   class="table table-striped table-hover table-bordered">
                <thead class="text-white gradient-background text-uppercase fw-light font-14">
                   <tr>
-                     <th> ADMIN</th>
+                     <th>STUDENT</th>
                      <th>URL</th>
                   </tr>
                </thead>
                <tbody class="font-14 align-items-center fw-500">
+                  @foreach ($staffLMS as $student)
                   <tr>
                      <td>
-                        Live Classes / සජීවී පන්ති
+                        {{ $student['title'] }}
                      </td>
                      <td>
                         <form class="row g-3">
                            <div class="col-lg-10 col-sm-9">
-                              <input type="text" class="form-control font-13 fw-500 text-dark "  value="https://www.youtube.com/watch?v=Nsg_7GpaTLY&list=RDMM&index=15">
+                              <input type="text" class="form-control font-13 fw-500 text-dark "  value="{{ $student['video_url'] }}">
                            </div>
                            <div class="col-lg-2 col-sm-3">
                               <button type="submit" class="btn btn-success
-                                 font-12 px-3 fw-bolder rounded-pill text-uppercase w-100">SUBMIT</button>
+                                 font-12 px-3 fw-bolder rounded-pill text-uppercase w-100">Update</button>
                            </div>
                         </form>
                      </td>
                   </tr>
-                  <tr>
-                     <td>
-                        Video Recordings / වීඩියෝ පටිගත කිරීම්
-                     </td>
-                     <td>
-                        <form class="row g-3">
-                            <div class="col-lg-10 col-sm-9">
-                              <input type="text" class="form-control font-13 fw-500 text-dark "
-                              value="https://www.youtube.com/watch?v=Nsg_7GpaTLY&list=RDMM&index=15" readonly>
-                           </div>
-                           <div class="col-lg-2 col-sm-3">
-                              <button type="submit" class="btn btn-danger
-                                 font-12 px-3 fw-bolder rounded-pill text-uppercase w-100 ">DELETE</button>
-                           </div>
-                        </form>
-                     </td>
-                  </tr>
-
-
-                  <tr>
-                    <td>
-                        Recordings /  පටිගත කිරීම්
-                    </td>
-                    <td>
-                       <form class="row g-3">
-                        <div class="col-lg-10 col-sm-9">
-                             <input type="text" class="form-control font-13 fw-500 text-dark "   value="https://www.youtube.com/watch?v=Nsg_7GpaTLY&list=RDMM&index=15">
-                          </div>
-                          <div class="col-lg-2 col-sm-3">
-                             <button type="submit" class="btn btn-warning
-                                font-12 px-3 fw-bolder rounded-pill text-uppercase w-100">EDIT</button>
-                          </div>
-                       </form>
-                    </td>
-                 </tr>
-
-
-
+                  @endforeach
                </tbody>
             </table>
          </div>

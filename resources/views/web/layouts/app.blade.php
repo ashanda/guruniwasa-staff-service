@@ -17,6 +17,7 @@
       <link rel="stylesheet" href="{{asset('themes/default/css/hover.css')}}">
       <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
       <link rel="stylesheet" href="{{asset('themes/default/css/custom-css-N.css')}}">
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
    </head>
    <body>
       @include('web.layouts.headers.header')
@@ -41,11 +42,13 @@
       <script src="{{ asset('themes/default/js/owl.carousel.min.js') }}"></script>
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       <script src="{{ asset('themes/default/js/admin-custom.js') }}"></script>
-
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
       
    </body>
+   @yield('script')
    <script>
     
     // Set maximum height for cards to align them

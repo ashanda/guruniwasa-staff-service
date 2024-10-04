@@ -433,4 +433,117 @@ class FeesController extends Controller
         }
     }
     
+
+    public function studentPaymentHistory(Request $request, $id){
+       $client = new Client();
+        
+        $url = env('API_GETWAY_URL') . '/api/v1/student-payment-history';
+        $accessToken = $request->cookie('access_token');
+        try {
+            $response = $client->get($url, [
+                'headers' => [ 
+                     'Authorization' => 'Bearer ' . $accessToken,
+                ],
+                'json' => [
+                    'student_id' => $id
+                ]
+            ]);
+           
+            if ($response->getStatusCode() == 200) {
+                $body = json_decode($response->getBody(), true);
+                
+                if (isset($body['status']) && $body['status'] === 200) {
+                    // Store token in a secure cookie
+                    
+                    $payments = $body['data']; // Extracting grades data from response
+                    
+                   
+                    return view('web.fees.student-payment_history', ['payments' => $payments]);
+                } else {
+                    return back()->with('error', $body['message']);
+                }
+            }
+       } catch (\Exception $e) {
+            
+           return back()->with('error', $e);
+        } 
+    }
+
+
+
+    public function classFeesPay(Request $request){
+ 
+
+        $client = new Client();
+        $url = env('API_GETWAY_URL') . '/api/v1/manual-payment';
+        $accessToken = $request->cookie('access_token');
+        $currentDateTime = date('Y-m-d H:i:s');
+        $inputMonth = $request->month; // Input like '8', '10', '11', '4'
+        $year = now()->year; // You can change this to any specific year
+        $day = '01'; // Default to the first day of the month
+
+        // Convert month to two-digit format if needed
+        $formattedMonth = str_pad($inputMonth, 2, '0', STR_PAD_LEFT);
+        
+        // Combine year, month, and day to form a date
+        $payMonth = "{$year}-{$formattedMonth}-{$day}";
+        
+        $cartData = is_array($request->cartData) ? json_encode($request->cartData) : $request->cartData;
+        $multipartData = [
+        [
+            'name'     => 'logged_user',
+            'contents' => session('staff_data')['name'],
+        ],    
+        [
+            'name'     => 'student_id',
+            'contents' => $request->student_id,
+        ],
+        [
+            'name'     => 'dateTime',
+            'contents' => $currentDateTime,
+        ],
+        [
+            'name'     => 'cartData',
+            'contents' => $cartData,
+        ],
+        [
+            'name'     => 'payment_method',
+            'contents' => $request->payment_method,
+        ],
+        [
+            'name'     => 'pay_month',
+            'contents' => $payMonth,
+        ],
+    ];
+
+   
+        try {
+            $response = $client->post($url, [
+                'headers' => [
+                     'Authorization' => 'Bearer ' . $accessToken,
+                ],
+                'multipart' => $multipartData,
+            ]);
+            
+            if ($response->getStatusCode() == 200) {
+                
+                $body = json_decode($response->getBody(), true);
+                
+                if (isset($body['status']) && $body['status'] === 200) {
+                    Alert::toast($body['message'], 'success');
+                    return redirect()->back();
+                }else{
+                    Alert::toast($body['message'], 'error');
+                    return redirect()->back();
+                }
+            }
+       } catch (\Exception $e) {
+            // Log the error if needed and handle exceptions
+                    Alert::toast($e->getMessage(), 'error');
+                    return redirect()->back();
+        }
+        
+    }
+
+    
 }

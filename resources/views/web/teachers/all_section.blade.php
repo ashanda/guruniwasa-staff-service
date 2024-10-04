@@ -69,8 +69,7 @@
          <div class="col-lg-3 col-sm-3 mb-3 align-items-center text-center">
             <a href="{{ route('web.teachers.video_time_tables') }}" class="hvr-shrink w-100">
                <div class="alert alert-info align-items-center card-1 position-relative custom-alert" role="alert">
-                  <p class="font-16 text-uppercase fw-bold text-dark py-3 mb-0">TEACHER INTRO VIDEO/ TIME
-                     TABLES
+                  <p class="font-16 text-uppercase fw-bold text-dark py-3 mb-0">TEACHER INTRO VIDEO
                   </p>
                </div>
             </a>

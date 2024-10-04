@@ -79,7 +79,7 @@
      </div>
 
       <div class="col-lg-3 col-sm-4  col-10  px-3  mb-3 mx-auto">
-         <a href="{{ route('web.student.talents') }}" class="hvr-shrink w-100">
+         <a href="{{ route('web.all.student.details') }}" class="hvr-shrink w-100">
             <div class="row align-items-center gradient-background-1 py-3 justify-content-around rounded-35 w-100">
                <div class="col-1  py-1">
                   <i class="fa fa-book fs-3 text-white  "></i>
