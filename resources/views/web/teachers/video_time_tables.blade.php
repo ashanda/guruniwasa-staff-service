@@ -1,15 +1,16 @@
 @extends('web.layouts.app')
 @section('content')
+{{-- {{ dd($teachers) }} --}}
 <div class="container-fluid">
     <div class="row align-items-center pt-2">
         <div class="col-lg-3 col-sm-3">
-            <a href="/" class="hvr-icon-back text-uppercase font-13 fw-bold text-purple">
+            <a href="{{ route('web.home') }}" class="hvr-icon-back text-uppercase font-13 fw-bold text-purple">
                 <i class="fa-regular fa-circle-left hvr-icon"></i>
                 BACK TO HOME
             </a>
         </div>
         <div class="col-lg-6 col-sm-6 text-center">
-            <h1 class="font-36 fw-bold text-uppercase text-purple">TEACHER INTRO VIDEO/ TIME TABLE
+            <h1 class="font-36 fw-bold text-uppercase text-purple">TEACHER INTRO VIDEO
             </h1>
         </div>
         <div class="col-lg-3 col-sm-3 pt-lg-0 pt-3 text-end">
@@ -29,176 +30,45 @@
                 <table id="videoTimeTbl" class="table table-striped table-hover table-bordered">
                     <thead class="text-white gradient-background text-uppercase fw-light font-14">
                        <tr>
-                          <th>PHOTO</th>
+                          
                           <th>TEACHER NAME</th>
-                          <th>TIME TABLE</th>
+                          
                           <th>INTRO VIDEO</th>
                        </tr>
                     </thead>
                     <tbody class="font-14 align-items-center fw-500">
+                      @foreach ($teachers as $teacher) 
                        <tr>
-                          <td>
-                             <img class="d-block w-25  w-50-mobile mx-auto rounded-circle"
-                                src="{{asset('themes/default/img/place-holder.png')}}" alt="Guru Niwasa LMS">
+                          
+                          <td>{{ $teacher['name'] }}
                           </td>
-                          <td>Abhiman Withakshana
-                          </td>
-                          <td>
-                             <a class="w-100" data-bs-toggle="modal" data-bs-target="#uploadTimeTbl">
-                                <ul
-                                   class="d-flex justify-content-center font-13 text-white my-3 py-2 px-3 bg-success fw-500 align-items-center  rounded-pill">
-                                   <li><i class="fa-solid fa-upload"></i></li>
-                                   <li class="d-none tab-d-none d-sm-block ps-2"> Upload </li>
-                                </ul>
-                             </a>
-                             <!-- Modal -->
-                             <div class="modal fade" id="uploadTimeTbl" data-bs-backdrop="static"
-                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog">
-                                   <div class="modal-content">
-                                      <div class="modal-header">
-                                         <h5 class="modal-title font-18 fw-bold   text-purple pt-lg-0 pt-1"
-                                            id="staticBackdropLabel">Upload Time Table</h5>
-                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                      </div>
-                                      <div class="modal-body">
-                                         <form action="">
-                                            <div class="modal-body ">
-                                               <div class="mb-3">
-                                                  <input class="form-control font-14 fw-500 text-dark"
-                                                     type="file" id="formFileMultiple" multiple="">
-                                               </div>
-                                            </div>
-                                            <button type="button"
-                                               class="btn text-uppercase font-12 text-white rounded-pill py-2 px-4 bg-primary fw-500   text-white hvr-shrink ">Submit</button>
-                                      </div>
-                                      </form>
-                                   </div>
-                                </div>
-                             </div>
-                          </td>
-                          <td>
-                             <form class="row g-3">
-                                <div class="col-lg-9 col-sm-8">
-                                   <input type="text" class="form-control font-13 fw-500 text-dark "
-                                      value="https://www.youtube.com/watch?v=Nsg_7GpaTLY&list=RDMM&index=15">
-                                </div>
-                                <div class="col-lg-2 col-sm-3">
-                                   <button type="submit" class="btn btn-success
-                                      font-12 px-4 fw-bolder rounded-pill text-uppercase  ">SUBMIT</button>
-                                </div>
-                                <div class="col-lg-1"></div>
-                             </form>
-                          </td>
-                       </tr>
-                       <tr>
-                          <td>
-                             <img class="d-block w-25 w-50-mobile mx-auto rounded-circle"
-                                src="{{asset('themes/default/img/place-holder.png')}}" alt="Guru Niwasa LMS">
-                          </td>
-                          <td>Abhiman Withakshana
-                          </td>
-                          <td>
-                             <a class="w-100" data-bs-toggle="modal" data-bs-target="#editTimeTbl">
-                                <ul
-                                   class="d-flex justify-content-center font-13 text-white my-3 py-2 px-3 bg-warning fw-500 align-items-center  rounded-pill">
-                                   <li><i class="fa-solid fa-upload"></i></li>
-                                   <li class="d-none tab-d-none d-sm-block ps-2"> Edit </li>
-                                </ul>
-                             </a>
-                             <!-- Modal -->
-                             <div class="modal fade" id="editTimeTbl" data-bs-backdrop="static"
-                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog">
-                                   <div class="modal-content">
-                                      <div class="modal-header">
-                                         <h5 class="modal-title font-18 fw-bold   text-purple pt-lg-0 pt-1"
-                                            id="staticBackdropLabel">Edit Time Table</h5>
-                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                      </div>
-                                      <div class="modal-body">
-                                         <form action="">
-                                            <div class="modal-body ">
-                                               <div class="mb-3">
-                                                  <input class="form-control font-14 fw-500 text-dark"
-                                                     type="file" id="formFileMultiple" multiple="">
-                                               </div>
-                                            </div>
-                                            <button type="button"
-                                               class="btn text-uppercase font-12 text-white rounded-pill py-2 px-4 bg-primary fw-500   text-white hvr-shrink ">Submit</button>
-                                      </div>
-                                      </form>
-                                   </div>
-                                </div>
-                             </div>
-                          </td>
-                          <td>
-                             <p class="py-2">
-                                <a target="_blank" class="bg-success font-12 px-4 py-2 text-white fw-bolder rounded-pill text-uppercase " href="https://www.youtube.com/watch?v=Nsg_7GpaTLY&list=RDMM&index=15">
-                                WATCH
-                                </a >
-                             </p>
-                          </td>
-                       </tr>
 
-
-
-                       <tr>
                         <td>
-                           <img class="d-block w-25 w-50-mobile mx-auto rounded-circle"
-                              src="{{asset('themes/default/img/place-holder.png')}}" alt="Guru Niwasa LMS">
-                        </td>
-                        <td>Abhiman Withakshana
-                        </td>
-                        <td>
-                           <a class="w-100" data-bs-toggle="modal" data-bs-target="#viewTimeTbl">
-                              <ul
-                                 class="d-flex justify-content-center font-13 text-white my-3 py-2 px-3 bg-info fw-500 align-items-center  rounded-pill">
-                                 <li><i class="fa-solid fa-eye"></i></li>
-                                 <li class="d-none tab-d-none d-sm-block ps-2"> View </li>
-                              </ul>
-                           </a>
-                           <!-- Modal -->
-                           <div class="modal fade" id="viewTimeTbl" data-bs-backdrop="static"
-                              data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                              aria-hidden="true">
-                              <div class="modal-dialog">
-                                 <div class="modal-content">
-                                    <div class="modal-header">
-                                       <h5 class="modal-title font-18 fw-bold   text-purple pt-lg-0 pt-1"
-                                          id="staticBackdropLabel">View Time Table</h5>
-                                       <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                          aria-label="Close"></button>
+                          <form action="{{ route('web.teachers.update_video') }}" method="post" class="row g-3">
+                           @csrf
+                                    <div class="col-lg-9 col-sm-8">
+                                       <input type="text" class="form-control font-13 fw-500 text-dark"
+                                             value="{{ $teacher['intro']['data']['video_link'] ?? '' }}" name="video_url">
+                                        <input type="hidden" name="teacher_id" value="{{ $teacher['id'] }}"> 
+                                        <input type="hidden" name="video_id" value="{{  $teacher['intro']['data']['id'] ?? ''  }}">     
                                     </div>
-                                    <div class="modal-body">
-                                       <div class="row">
-                                        <div class="col-12">
-                                            <img class="d-block w-100 mx-auto  "
-                                            src="{{asset('themes/default/img/6.webp')}}" alt="Guru Niwasa LMS">
-                                        </div>
+                                    <div class="col-lg-2 col-sm-3">
+                                       <button type="submit" class="btn btn-success font-12 px-4 fw-bolder rounded-pill text-uppercase">SUBMIT</button>
+                                       @if ($teacher['intro']['data']['video_link'] ?? '')
+                                        <a href="{{ $teacher['intro']['data']['video_link'] ?? '' }}" target="_blank" class="btn btn-warning font-12 px-4 fw-bolder rounded-pill text-uppercase">Watch</a>    
+                                       @endif
                                        </div>
-                                 </div>
-                              </div>
-                           </div>
+                                    <div class="col-lg-1"></div>
+                                 </form>
+                            
                         </td>
-                        <td>
-                            <form class="row g-3">
-                               <div class="col-lg-9 col-sm-8">
-                                  <input type="text" class="form-control font-13 fw-500 text-dark "
-                                     value="https://www.youtube.com/watch?v=Nsg_7GpaTLY&list=RDMM&index=15">
-                               </div>
-                               <div class="col-lg-2 col-sm-3">
-                                  <button type="submit" class="btn btn-warning
-                                     font-12 px-4 fw-bolder rounded-pill text-uppercase  ">EDIT</button>
-                               </div>
-                               <div class="col-lg-1"></div>
-                            </form>
-                         </td>
-                     </tr>
+
+                       </tr>
+                       @endforeach
+
+
+
+
                     </tbody>
                  </table>
 

@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\GradeController;
+use App\Http\Controllers\IteamShopController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\Web\Home\HomeController;
 use App\Http\Controllers\Web\OtherTransactionController;
 use App\Http\Controllers\Web\FeesController;
@@ -26,6 +30,7 @@ use App\Http\Controllers\Web\TeacherSubjectController;
 use App\Http\Controllers\Web\AuthController;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -42,6 +47,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [AuthController::class, 'loginView'])->name('web.index');
 Route::get('/login', [AuthController::class, 'loginView'])->name('web.login');
 Route::post('/login', [AuthController::class, 'login'])->name('api.staffs.login');
+
 // profile
 Route::middleware(['check.authorization'])->group(function () {
 Route::get('/home', [HomeController::class, 'index'])->name('web.home');
@@ -54,6 +60,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('web.logout');
 Route::get('/fees/view', [FeesController::class, 'feesView'])->name('web.fees.view');
 Route::get('/fees/class-pending', [FeesController::class, 'feesClassPending'])->name('web.fees.class_pending');
 Route::get('/fees/class-fees', [FeesController::class, 'classFees'])->name('web.fees.class_fess');
+Route::post('/pay/class-fees', [FeesController::class, 'classFeesPay'])->name('web.pay.class_fess');
 
 Route::get('/fees/cash', [FeesController::class, 'classFeesCash'])->name('web.fees.class_fess_cash');
 Route::get('/fees/pos', [FeesController::class, 'classFeesPos'])->name('web.fees.class_fess_Pos');
@@ -66,6 +73,7 @@ Route::get('/fees/monthly-bank-payment', [FeesController::class, 'classFeesMonth
 Route::get('/fees/bank-payment', [FeesController::class, 'classFeesBankPayment'])->name('web.fees.class_fess_bank_payment');
 
 Route::get('/fees/payment-history', [FeesController::class, 'paymentHistory'])->name('web.fees.payment_history');
+Route::get('/fees/student-payment-history/{id}', [FeesController::class, 'studentPaymentHistory'])->name('web.fees.student_payment_history');
 
 
 
@@ -137,6 +145,12 @@ Route::get('/my-leaves', [SalaryController::class, 'myLeaves'])->name('web.salar
 
 
 // ItemShopController
+Route::get('/item-categories', [ItemShopController::class, 'itemCategories'])->name('web.item-categories');
+Route::post('/item-categories-store', [ItemShopController::class, 'itemCategoriesStore'])->name('item-categories.store');
+Route::post('/item-categories-update', [ItemShopController::class, 'itemCategoriesUpdate'])->name('item-categories.update');
+Route::post('/item-categories-delete', [ItemShopController::class, 'itemCategoriesDelete'])->name('item-categories.delete');
+
+
 Route::get('/item-shop-view', [ItemShopController::class, 'itemShopView'])->name('web.item-shop-view');
 Route::get('/item-shop', [ItemShopController::class, 'itemShop'])->name('web.item-shop');
 Route::get('/single-item', [ItemShopController::class, 'singleItem'])->name('web.single-item');
@@ -164,7 +178,8 @@ Route::get('/view-analytics', [ItemShopController::class, 'viewAnalytics'])->nam
 
 // STUDENT TALENTS
 Route::get('/student-talents', [StudentTalentController::class, 'studentTalent'])->name('web.student.talents');
-Route::get('/student-details', [StudentTalentController::class, 'studentDetails'])->name('web.student.details');
+Route::get('/student-details/{id}', [StudentTalentController::class, 'studentDetails'])->name('web.student.details');
+Route::get('/student-details', [StudentTalentController::class, 'allstudentDetails'])->name('web.all.student.details');
 Route::get('/inactive-accounts', [StudentTalentController::class, 'inactiveAccounts'])->name('web.inactive.accounts');
 Route::get('/non-paid-accounts', [StudentTalentController::class, 'nonPaidAccounts'])->name('web.non_paid.accounts');
 Route::get('/scholarship-details', [StudentTalentController::class, 'scholarshipDetails'])->name('web.scholarship.details');
@@ -214,7 +229,7 @@ Route::get('/schedule-class', [TeacherController::class, 'scheduleClass'])->name
 Route::get('/schedule-class-view', [TeacherController::class, 'scheduleClassView'])->name('web.teachers.schedule_class_view');
 
 Route::get('/add-grade', [TeacherController::class, 'addGrade'])->name('web.teachers.add_grade');
-Route::get('/add-subject', [TeacherController::class, 'addSubject'])->name('web.teachers.add_subject');
+Route::get('/add-subject/{id}', [TeacherController::class, 'addSubject'])->name('web.teachers.add_subject');
 
 Route::post('/payment-approve', [FeesController::class, 'approve'])->name('approve');
 Route::post('/payment-reject', [FeesController::class, 'reject'])->name('reject');
@@ -223,5 +238,28 @@ Route::get('/payment-history', [FeesController::class, 'paymentHistory'])->name(
 
 
 Route::post('/payment-history-search', [FeesController::class, 'paymentHistorysearch'])->name('web.fees.history_fees');
+
+
+Route::get('/search-students', [SearchController::class, 'getSearchOptions']);
+Route::get('/single-student-data/{id}', [SearchController::class, 'getStudentData']);
+
+Route::post('/grades/create', [GradeController::class, 'create'])->name('grades.create');
+Route::put('/grades/{id}', [GradeController::class, 'update'])->name('grades.update');
+Route::delete('/grades/{id}', [GradeController::class, 'destroy'])->name('grades.destroy');
+
+
+Route::post('/subjects/create', [SubjectController::class, 'create'])->name('subjects.store');
+Route::post('/subjects/update', [SubjectController::class, 'update'])->name('subjects.update');
+Route::post('/subjects/delete', [SubjectController::class, 'destroy'])->name('subjects.destroy');
+
+
+Route::post('/class-issues/remark', [TeacherController::class, 'remark'])->name('class-issues.remark');
+Route::post('/video-issues/remark', [TeacherController::class, 'Videoremark'])->name('video-issues.remark');
+Route::post('/teacher-intro-video', [TeacherController::class, 'introVideo'])->name('web.teachers.update_video');
+
+
+Route::post('/add-shop-items', [ItemShopController::class, 'addShopItems'])->name('web.item-shop.add_items');
+Route::post('/update-shop-items', [ItemShopController::class, 'updateShopItems'])->name('web.item-shop.update_items');
+Route::post('/delete-shop-items', [ItemShopController::class, 'deleteShopItems'])->name('web.item-shop.delete_items');
 
 });

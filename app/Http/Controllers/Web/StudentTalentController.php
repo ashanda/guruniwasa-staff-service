@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class StudentTalentController extends Controller
@@ -20,17 +21,74 @@ class StudentTalentController extends Controller
         }
     }
 
-    public function studentDetails()
+    public function studentDetails(Request $request, $id)
     {
-        try{
-
-            return view('web.student_talents.details');
-
-        }catch(\Exception $exception){
-
-            return;
+         $client = new Client();
+        
+        $url = env('API_GETWAY_URL') . '/api/v1/single-student';
+        $accessToken = $request->cookie('access_token');
+        try {
+            $response = $client->get($url, [
+                'headers' => [ 
+                     'Authorization' => 'Bearer ' . $accessToken,
+                ],
+                'query' => [
+                    'student_id' => $id
+                ]
+            ]);
+          
+                if ($response->getStatusCode() == 200) {
+                $body = json_decode($response->getBody(), true);
+               
+                if (isset($body['status']) && $body['status'] === 200) {
+                    $student = $body['data'];
+                    
+                    // Return the student data as JSON for AJAX
+                    return view('web.student_talents.details',compact('student'));
+                } else {
+                    return response()->json(['error' => $body['message']], 400);
+                }
+            }
+         } catch (\Exception $e) {
+            
+           return back()->with('error', $e);
         }
+
     }
+
+    public function allstudentDetails(Request $request)
+    {
+        $client = new Client();
+        
+        $url = env('API_GETWAY_URL') . '/api/v1/all-student';
+        $accessToken = $request->cookie('access_token');
+        try {
+            $response = $client->get($url, [
+                'headers' => [ 
+                     'Authorization' => 'Bearer ' . $accessToken,
+                ],
+                
+            ]);
+          
+                if ($response->getStatusCode() == 200) {
+                $body = json_decode($response->getBody(), true);
+                
+                if (isset($body['status']) && $body['status'] === 200) {
+                    $students = $body['students'];
+                    
+                    // Return the student data as JSON for AJAX
+                    return view('web.student_talents.details-all',compact('students'));
+                } else {
+                    return response()->json(['error' => $body['message']], 400);
+                }
+            }
+         } catch (\Exception $e) {
+            
+          return back()->with('error', $e);
+        }
+
+    }
+    
 
     public function inactiveAccounts()
     {
